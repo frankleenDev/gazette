@@ -24,7 +24,15 @@ class NewsController extends Controller
 
     	$news = DB::table('news')->get();
 
-    	return view('index')->with('news', $news);
+    	$most_viewed   = DB::table('news')->orderBy('views', 'desc')->first();
+
+    	$trending 	   = DB::table('news')->max('views');
+
+    	$trending_news = DB::table('news')->where('views','!=', $trending)->orderBy('views', 'desc')->take(4)->get();
+
+    	//dd($trending_news);
+
+    	return view('index')->with(['news'=> $news, 'most_viewed'=> $most_viewed, 'trending'=> $trending_news]);
 
     }
 

@@ -18,6 +18,7 @@ class CreateNewsTable extends Migration
             $table->string('headlline');
             $table->string('content');
             $table->string('category');
+            $table->string('views');
             $table->integer('breaking_news');
             $table->integer('priority');
             $table->string('image_urls');

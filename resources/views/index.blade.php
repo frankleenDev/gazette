@@ -244,7 +244,12 @@
                         </div>
                         <h3><a href="#" class="font-pt">{{ $info->headline }}</a></h3>
                         <div class="date">
-                            <a href="#">March 29, 2018</a>
+                            <a href="#">
+                                <?php 
+                                $timestamp = strtotime($info->created_at); 
+                                $new_date = date('F j, Y', $timestamp);
+                                echo $new_date; ?>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -263,12 +268,11 @@
                     @foreach( $news as $info )
                         @if( $info->priority=="0" && $info->breaking_news=="0" )
                             <li>
-                                sdfsd
                                 <a href="#"><span class="latest-news-time">10:40</span>{{ $info->headline }}</a>
                             </li>
-                        @endif
+                        @endif  
                     @endforeach
-                    
+
                 </ul>
             </div>
         </div>
@@ -284,20 +288,28 @@
                     <div class="gazette-welcome-post">
                         <!-- Post Tag -->
                         <div class="gazette-post-tag">
-                            <a href="#">Politices</a>
+                            <a href="#">{{ $most_viewed->category }}</a>
                         </div>
-                        <h2 class="font-pt">What's behind the world obsession with gems?</h2>
-                        <p class="gazette-post-date">March 29, 2016</p>
+                        <h2 class="font-pt">{{ $most_viewed->headline }}</h2>
+                        <p class="gazette-post-date">
+
+                        <?php 
+                        $timestamp = strtotime($most_viewed->created_at); 
+                        $new_date = date('F j, Y', $timestamp);
+                        echo $new_date; ?>
+                            
+                        </p>
                         <!-- Post Thumbnail -->
                         <div class="blog-post-thumbnail my-5">
-                            <img src="img/blog-img/1.jpg" alt="post-thumb">
+                            <img src="<?php echo substr($most_viewed->image_urls, 0, strpos($most_viewed->image_urls, " ")); ?>" alt="post-thumb">
                         </div>
                         <!-- Post Excerpt -->
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere. Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend.</p>
+                        <p> {!! str_limit(nl2br($most_viewed->content), $limit = 750, $end = '...') !!}</p>
                         <!-- Reading More -->
                         <div class="post-continue-reading-share d-sm-flex align-items-center justify-content-between mt-30">
                             <div class="post-continue-btn">
-                                <a href="#" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>
+                                <!--<a href="#" class="font-pt">Continue Reading <i class="fa fa-chevron-right" aria-hidden="true"></i></a>-->
+                                <button class="btn text-dark" style="background-color: transparent; border-color: #dbdbdb;"><small>Read more</small></button>
                             </div>
                             <div class="post-share-btn-group">
                                 <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
@@ -352,34 +364,28 @@
                         <!-- Breaking News Widget -->
                         <div class="breaking-news-widget">
                             <div class="widget-title">
-                                <h5>breaking news</h5>
+                                <h5>top stories</h5>
                             </div>
                             <!-- Single Breaking News Widget -->
-                            <div class="single-breaking-news-widget">
-                                <img src="img/blog-img/bn-1.jpg" alt="">
-                                <div class="breakingnews-title">
-                                    <p>breaking news</p>
+                            @foreach( $trending as $trends )
+                                <div class="single-breaking-news-widget">
+                                    <img height="300" src="<?php
+                                        echo 'http://localhost:8000/'.substr($trends->image_urls, 0, strpos($trends->image_urls, " ")); ?>" alt="">
+                                    <div class="breakingnews-title">
+                                        <p>trending</p>
+                                    </div>
+                                    <div class="breaking-news-heading gradient-background-overlay">
+                                        <h5 class="font-pt">{{ $trends->headline }}</h5>
+                                    </div>
                                 </div>
-                                <div class="breaking-news-heading gradient-background-overlay">
-                                    <h5 class="font-pt">China leads new global skyscraper record</h5>
-                                </div>
-                            </div>
-                            <!-- Single Breaking News Widget -->
-                            <div class="single-breaking-news-widget">
-                                <img src="img/blog-img/bn-2.jpg" alt="">
-                                <div class="breakingnews-title">
-                                    <p>breaking news</p>
-                                </div>
-                                <div class="breaking-news-heading gradient-background-overlay">
-                                    <h5 class="font-pt">Can a zebra crossing change its stripes?</h5>
-                                </div>
-                            </div>
+                            @endforeach
+
                         </div>
 
                         <!-- Don't Miss Widget -->
                         <div class="donnot-miss-widget">
                             <div class="widget-title">
-                                <h5>Don't miss</h5>
+                                <h5>Editor's Pick</h5>
                             </div>
                             <!-- Single Don't Miss Post -->
                             <div class="single-dont-miss-post d-flex mb-30">
