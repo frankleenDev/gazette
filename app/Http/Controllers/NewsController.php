@@ -22,7 +22,9 @@ class NewsController extends Controller
     public function gazette()
     {
 
-    	$news = DB::table('news')->get();
+    	$news 		   = DB::table('news')->orderBy('id', 'desc')->get();
+
+    	$healines 	   = DB::table('news')->where('slider_set','=', '1')->orderBy('id', 'desc')->take('8')->get();
 
     	$most_viewed   = DB::table('news')->orderBy('views', 'desc')->first();
 
@@ -32,7 +34,7 @@ class NewsController extends Controller
 
     	//dd($trending_news);
 
-    	return view('index')->with(['news'=> $news, 'most_viewed'=> $most_viewed, 'trending'=> $trending_news]);
+    	return view('index')->with(['news'=> $news, 'most_viewed'=> $most_viewed, 'trending'=> $trending_news, 'headlines'=> $healines]);
 
     }
 
@@ -97,9 +99,19 @@ class NewsController extends Controller
         	$basic->breaking_news = $request->breakingnews;
         }
 
+        if($request->editors_choice){
+        	//dd('here');
+        	$basic->editors_choice = $request->editors_choice;
+        }
+
         if($request->highpriority	){
         	//dd('here');
         	$basic->priority 	  = $request->highpriority;
+        }
+
+        if($request->slider	){
+        	//dd('here');
+        	$basic->slider 	  = $request->slider;
         }
 
         $basic->image_urls 	  = $arrString;

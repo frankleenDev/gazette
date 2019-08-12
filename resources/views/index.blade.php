@@ -20,6 +20,15 @@
     <!-- Responsive CSS -->
     <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
 
+    <style type="text/css">
+        .shadowz{
+        box-shadow: 
+       inset 0 -3em 3em rgba(0,0,0,0), 
+             0 0  0 1px rgb(255,255,255),
+             0.3em 0.3em 1em rgba(0,0,0,0.03);
+         }
+    </style>
+
 </head>
 
 <body>
@@ -233,8 +242,7 @@
     <!-- Welcome Blog Slide Area Start -->
     <section class="welcome-blog-post-slide owl-carousel">
         <!-- Single Blog Post -->
-        @foreach( $news as $info )
-            @if( $info->priority=="1" || $info->breaking_news=="1" )
+        @foreach( $headlines as $info )
                 <div class="single-blog-post-slide bg-img background-overlay-5" style="background-image: url(<?php
                 echo 'http://localhost:8000/'.substr($info->image_urls, 0, strpos($info->image_urls, " ")); ?>)">
                     <!-- Single Blog Post Content -->
@@ -253,7 +261,6 @@
                         </div>
                     </div>
                 </div>
-            @endif
         @endforeach
 
     </section>
@@ -285,7 +292,7 @@
             <div class="row">
                 <div class="col-12 col-lg-9">
                     <!-- Gazette Welcome Post -->
-                    <div class="gazette-welcome-post">
+                    <div style="background-color: #FCFBFB; padding: 15px; " class="gazette-welcome-post shadowz">
                         <!-- Post Tag -->
                         <div class="gazette-post-tag">
                             <a href="#">{{ $most_viewed->category }}</a>
@@ -322,31 +329,43 @@
 
                     <div class="gazette-todays-post section_padding_100_50">
                         <div class="gazette-heading">
-                            <h4>today’s most popular</h4>
+                            <h4>top stories</h4>
                         </div>
                         <!-- Single Today Post -->
-                        <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
-                            <div class="todays-post-thumb">
-                                <img src="img/blog-img/2.jpg" alt="">
-                            </div>
-                            <div class="todays-post-content">
-                                <!-- Post Tag -->
-                                <div class="gazette-post-tag">
-                                    <a href="#">News</a>
+                        <?php $p = 0; ?>
+                        @foreach( $news as $priority_news )
+                            @if( $priority_news->priority=="1" && $p <= '2' )
+                                <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
+                                    <div class="todays-post-thumb" style="height: 280px; background-size: cover; background-repeat: no-repeat; background-image: url(<?php
+                echo 'http://localhost:8000/'.substr($priority_news->image_urls, 0, strpos($info->image_urls, " ")); ?>)">
+                                    
+                                    </div>
+                                    <div class="todays-post-content">
+                                        <!-- Post Tag -->
+                                        <div class="gazette-post-tag">
+                                            <a href="#">{{ $priority_news->category }}</a>
+                                        </div>
+                                        <h3><a href="#" class="font-pt mb-2">{{ $priority_news->headline }}</a></h3>
+                                        <span class="gazette-post-date mb-2">
+                                            <?php 
+                                                $timestamp = strtotime($priority_news->created_at); 
+                                                $new_date = date('F j, Y', $timestamp);
+                                                echo $new_date; ?>
+                                        </span>
+                                        <a href="#" class="post-total-comments">3 Comments</a>
+                                        <p> {{ str_limit($priority_news->content, $limit = 250, $end = '...') }}</p>
+                                    </div>
                                 </div>
-                                <h3><a href="#" class="font-pt mb-2">$250-million mansion is most expensive</a></h3>
-                                <span class="gazette-post-date mb-2">March 29, 2016</span>
-                                <a href="#" class="post-total-comments">3 Comments</a>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse ultrices egestas nunc, quis venenatis orci tincidunt id. Fusce commodo blandit eleifend. Nullam viverra tincidunt dolor, at pulvinar dui. Nullam at risus ut ipsum viverra posuere.</p>
-                            </div>
-                        </div>
-                        <!-- Single Today Post -->
+                            @endif
+                            <?php if($priority_news->priority=="1"){ $p++;} ?>
+                        @endforeach
+                        <!-- Single Today Post --
                         <div class="gazette-single-todays-post d-md-flex align-items-start mb-50">
                             <div class="todays-post-thumb">
                                 <img src="img/blog-img/3.jpg" alt="">
                             </div>
                             <div class="todays-post-content">
-                                <!-- Post Tag -->
+                                <!-- Post Tag --
                                 <div class="gazette-post-tag">
                                     <a href="#">Life</a>
                                 </div>
@@ -355,7 +374,7 @@
                                 <a href="#" class="post-total-comments">3 Comments</a>
                                 <p>Aliquam quis convallis enim. Nunc pulvinar molestie sem id blandit. Nunc venenatis interdum mollis. Aliquam finibus nulla quam, a iaculis justo finibus non. Suspendisse in fermentum nunc.</p>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
 
@@ -364,12 +383,12 @@
                         <!-- Breaking News Widget -->
                         <div class="breaking-news-widget">
                             <div class="widget-title">
-                                <h5>top stories</h5>
+                                <h5>trending stories</h5>
                             </div>
                             <!-- Single Breaking News Widget -->
                             @foreach( $trending as $trends )
-                                <div class="single-breaking-news-widget">
-                                    <img height="300" src="<?php
+                                <div class="single-breaking-news-widget shadowz">
+                                    <img src="<?php
                                         echo 'http://localhost:8000/'.substr($trends->image_urls, 0, strpos($trends->image_urls, " ")); ?>" alt="">
                                     <div class="breakingnews-title">
                                         <p>trending</p>
@@ -388,35 +407,27 @@
                                 <h5>Editor's Pick</h5>
                             </div>
                             <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-1.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">EU council reunites</a>
-                                    <span>Nov 29, 2017</span>
-                                </div>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-2.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">A new way to travel the world</a>
-                                    <span>March 29, 2016</span>
-                                </div>
-                            </div>
-                            <!-- Single Don't Miss Post -->
-                            <div class="single-dont-miss-post d-flex mb-30">
-                                <div class="dont-miss-post-thumb">
-                                    <img src="img/blog-img/dm-3.jpg" alt="">
-                                </div>
-                                <div class="dont-miss-post-content">
-                                    <a href="#" class="font-pt">Why choose a bank?</a>
-                                    <span>March 29, 2016</span>
-                                </div>
-                            </div>
+                            <?php $e = 0; ?>
+                            @foreach( $news as $editorz )
+                                @if( $editorz->editors_choice=='1' && $e<="3" )
+                                    <div class="single-dont-miss-post d-flex mb-30">
+                                        <div class="dont-miss-post-thumb">
+                                            <img style="height: 65px" src="<?php
+                                            echo 'http://localhost:8000/'.substr($editorz->image_urls, 0, strpos($editorz->image_urls, " ")); ?>" alt="">
+                                        </div>
+                                        <div class="dont-miss-post-content">
+                                            <a href="#" class="font-pt">{{ str_limit($editorz->headline, 40) }}</a>
+                                            <span>
+                                                <?php 
+                                                    $timestamp = strtotime($editorz->created_at); 
+                                                    $new_date = date('F j, Y', $timestamp);
+                                                    echo $new_date; ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <?php $e++; ?>
+                                @endif
+                            @endforeach
                         </div>
                         <!-- Advert Widget -->
                         <div class="advert-widget">

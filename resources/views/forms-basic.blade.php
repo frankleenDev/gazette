@@ -468,6 +468,16 @@
                                                         <input type="checkbox" id="checkbox2" name="highpriority" value="1" class="form-check-input"><small>High Priority</small>
                                                     </label>
                                                 </div>
+                                                <div class="checkbox">
+                                                    <label for="checkbox2" class="form-check-label ">
+                                                        <input type="checkbox" id="checkbox2" name="editors_choice" value="1" class="form-check-input"><small>Editor's Choice</small>
+                                                    </label>
+                                                </div>
+                                                <div class="checkbox">
+                                                    <label for="checkbox2" class="form-check-label ">
+                                                        <input type="checkbox" id="checkbox2" name="slider" value="1" class="form-check-input"><small>Slider Board</small>
+                                                    </label>
+                                                </div>
                                                 <!--
                                                 <div class="checkbox">
                                                     <label for="checkbox3" class="form-check-label ">
